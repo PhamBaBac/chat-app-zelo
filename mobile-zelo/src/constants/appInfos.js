@@ -5,5 +5,5 @@ export default {
     WIDTH: Dimensions.get('window').width,
     HEIGHT: Dimensions.get('window').height,
   },
-  BASE_URL: 'https://eventhub-sever.onrender.com',
+  BASE_URL: 'http://192.168.193.1:3001',
 };

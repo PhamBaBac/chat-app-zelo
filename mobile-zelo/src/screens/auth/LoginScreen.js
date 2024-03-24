@@ -1,16 +1,43 @@
 import { Text, TextInput, View, StyleSheet } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import TextComponent from "../../components/TextComponent";
 import { COLORS, APPINFOS } from "../../constants";
 import { globalStyles } from "../../styles/globalStyle";
 import ButtonComponent from "../../components/ButtonComponent";
 import HeaderComponent from "../../components/HeaderComponet";
+import authApi from "../../apis/authApi";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { addAuth } from "../../redux/reducers/authReducer";
+import { useDispatch } from "react-redux";
 
 const LoginScreen = ({ navigation }) => {
+  // const navigation = useNavigation();
   const onBackPress = () => {
     navigation.goBack();
   };
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const dispatch = useDispatch();
+  const hanhdleLogin = async () => {
+    try {
+      const response = await authApi.handleAuthencation(
+        "/login",
+        {
+          email: email,
+          password: password,
+        },
+        "POST"
+      );
+      dispatch(addAuth(response.data));
+      console.log("data: ", response.data);
+      await AsyncStorage.setItem('auth', JSON.stringify(response.data));
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+  
   return (
     <View style={globalStyles.container}>
       <HeaderComponent
@@ -21,14 +48,12 @@ const LoginScreen = ({ navigation }) => {
           alignItems: "center",
           paddingLeft: 16,
           justifyContent: "space-between",
-          
         }}
         title="Đăng nhập"
         fontFamily={"medium"}
         onBackPress={onBackPress}
         color={COLORS.white}
         size={18}
-    
       />
       <View
         style={{
@@ -42,18 +67,20 @@ const LoginScreen = ({ navigation }) => {
           text="Vui lòng nhập email vài mật khẩu để đăng nhập"
           size={16}
           fontFamily="medium"
-          style={{marginRight: 20}}
+          style={{ marginRight: 20 }}
         />
       </View>
       <View style={styles.inputsContainer}>
         <TextInput
           style={[styles.input, { marginTop: 30 }]}
           placeholder="Email"
+          onChangeText={setEmail}
         />
         <TextInput
           style={styles.input}
           placeholder="Mật khẩu"
           secureTextEntry={true}
+          onChangeText={setPassword}
         />
         <TextComponent
           text="Lấy lại mật khẩu"
@@ -69,7 +96,7 @@ const LoginScreen = ({ navigation }) => {
           width={APPINFOS.sizes.WIDTH * 0.2}
           height={APPINFOS.sizes.HEIGHT * 0.1}
           borderRadius={APPINFOS.sizes.WIDTH * 0.2}
-          onPress={() => {}}
+          onPress={hanhdleLogin}
         />
       </View>
     </View>

@@ -10,4 +10,5 @@ export default {
   gray5: "#d9d9d9",
   link: "#5669FF",
   danger: "#e74c3c",
+  red: "#FF0000",
 };
