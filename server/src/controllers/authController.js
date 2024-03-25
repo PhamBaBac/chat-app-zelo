@@ -14,7 +14,7 @@ const getJsonWebToken = (email, id) => {
 
 
 const register = asyncHandler(async (req, res) => {
-    const { fullname, email, password } = req.body;
+    const { fullname, email, password,photoUrl } = req.body;
     const existingUser = await UserModel.findOne({ email });
     if (existingUser) {
         return res.status(401).json({ message: 'Email đã tồn tại' });
@@ -24,6 +24,7 @@ const register = asyncHandler(async (req, res) => {
     const newUser = new UserModel({
         fullname,
         email,
+        photoUrl,
         password: hashedPassword
     });
 
@@ -31,9 +32,11 @@ const register = asyncHandler(async (req, res) => {
     res.status(200).json({
         message: 'Đăng ký thành công',
         data:{
-            email: newUser.email,
             id: newUser._id,
-            accesstoken: getJsonWebToken(email, newUser._id)
+            fullname: newUser.fullname,
+            email: newUser.email,
+            photoUrl: newUser.photoUrl,
+            accesstoken: getJsonWebToken(fullname, email, photoUrl, newUser._id)
         }
     })
 });
