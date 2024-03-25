@@ -67,7 +67,7 @@ const OnbroadingScreen = () => {
         }}
       >
         <ButtonComponent title="Đăng nhập" onPress={() => navigation.navigate("LoginScreen")} />
-        <ButtonComponent title="Taọ tài khoản mới" onPress={() => navigation.navigate("SignUpScreen")} />
+        <ButtonComponent title="Tạo tài khoản mới" onPress={() => navigation.navigate("SignUpScreen")} />
       </View>
     </View>
   );

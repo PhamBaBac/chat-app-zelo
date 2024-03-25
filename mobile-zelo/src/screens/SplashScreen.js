@@ -5,7 +5,7 @@ import { COLORS } from "../constants";
 const SplashSCreen = () => {
   return (
     <ImageBackground
-      style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: COLORS.primary, marginTop: 40}}
+      style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: COLORS.primary}}
       imageStyle={{ flex: 1 }}
     >
       <Image source={require("../assets/images/logo.png")} style={{
