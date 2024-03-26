@@ -2,6 +2,56 @@ const UserModel = require('../models/userModel');
 const bcrypt = require('bcryptjs')
 const asyncHandler = require('express-async-handler');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
+require('dotenv').config();
+
+const transporter = nodemailer.createTransport({
+	host: 'smtp.gmail.com',
+	port: 587,
+	auth: {
+		user: process.env.USERNAME_EMAIL,
+		pass: process.env.PASSWORD_EMAIL,
+	},
+});
+
+const handleSendMail = async (email) => {
+    try {
+		await transporter.sendMail(email);
+
+		return 'OK';
+	} catch (error) {
+		return error;
+	}
+  };
+  
+  const verification = asyncHandler(async (req, res) => {
+    const { email } = req.body;
+
+	const verificationCode = Math.round(1000 + Math.random() * 9000);
+
+	try {
+		const data = {
+			from: `"Support EventHub Appplication" <${process.env.USERNAME_EMAIL}>`,
+			to: email,
+			subject: 'Verification email code',
+			text: 'Your code to verification email',
+			html: `<h1>${verificationCode}</h1>`,
+		};
+
+		await handleSendMail(data);
+
+		res.status(200).json({
+			message: 'Send verification code successfully!!!',
+			data: {
+				code: verificationCode,
+			},
+		});
+	} catch (error) {
+		res.status(401);
+		throw new Error('Can not send email');
+	}
+  });
+  
 
 const getJsonWebToken = (email, id) => {
     const payload = {
@@ -42,7 +92,7 @@ const register = asyncHandler(async (req, res) => {
 });
 
 const login = asyncHandler(async (req, res) => {
-	const { email, password } = req.body;
+	const { email, password, fullname, photoUrl } = req.body;
 
 	const existingUser = await UserModel.findOne({ email });
 
@@ -63,12 +113,14 @@ const login = asyncHandler(async (req, res) => {
 		data: {
 			id: existingUser.id,
 			email: existingUser.email,
-			accesstoken: await getJsonWebToken(email, existingUser.id),
+			fullname: existingUser.fullname,
+			photoUrl: existingUser.photoUrl,
+			accesstoken: await getJsonWebToken(email, existingUser.id, fullname, photoUrl),
 		},
 	});
 });
 
 
 module.exports = {
-    register, login
+    register, login, verification
 };
