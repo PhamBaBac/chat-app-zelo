@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, APPINFOS } from "../constants";
 
-const ButtonComponent = ({ title, onPress, width, height, borderRadius, icon }) => {
+const ButtonComponent = ({ title, onPress, width, height, borderRadius, icon, isLink, linkColor }) => {
   const buttonWidth = width || APPINFOS.sizes.WIDTH * 0.8;
   const buttonHeight = height || APPINFOS.sizes.HEIGHT * 0.08;
   const buttonBorderRadius = borderRadius || 40;
@@ -11,10 +11,14 @@ const ButtonComponent = ({ title, onPress, width, height, borderRadius, icon }) 
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[styles.button, { width: buttonWidth, height: buttonHeight, borderRadius: buttonBorderRadius }]}
+      style={[
+        styles.button,
+        { width: buttonWidth, height: buttonHeight, borderRadius: buttonBorderRadius },
+        isLink && styles.link // Apply link style if isLink is true
+      ]}
     >
       {icon && <Ionicons name={icon} size={30} color={COLORS.white} style={styles.icon} />}
-      <Text style={styles.buttonText}>{title}</Text>
+      <Text style={[styles.buttonText, isLink && { color: linkColor }]}>{title}</Text>
     </TouchableOpacity>
   );
 };
@@ -36,7 +40,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     position: "absolute",
     fontSize: 40,
-  }
+  },
+  link: {
+    backgroundColor: "transparent",
+    borderWidth: 0,
+  },
 });
 
 export default ButtonComponent;

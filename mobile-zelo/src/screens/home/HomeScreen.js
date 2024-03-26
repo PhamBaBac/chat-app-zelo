@@ -5,12 +5,12 @@ import ButtonComponent from "../../components/ButtonComponent";
 import { useDispatch } from "react-redux";
 import { authSelector, removeAuth } from "../../redux/reducers/authReducer";
 import { useSelector } from "react-redux";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const HomeScreen = () => {
   const dispatch = useDispatch();
   const user = useSelector(authSelector);
-  // ;console.log('user: ', user)
-  const handleLogout = () => {
+  const handleLogout = async() => {
+    await AsyncStorage.clear();
     dispatch(removeAuth({}));
   };
 
