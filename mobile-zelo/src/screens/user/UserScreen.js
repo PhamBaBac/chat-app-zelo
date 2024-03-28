@@ -20,7 +20,7 @@ const UserScreen = () => {
         <View style={styles.container}>
             <Avatar.Image
                 size={40}
-                source={{ uri: user.avatar }} style={styles.avatar} />
+                source={{ uri: user.photoUrl }} style={styles.avatar} />
             <Text style={styles.name}>{user.fullname}</Text>
             <Button title="Change Avatar" onPress={{}} />
 

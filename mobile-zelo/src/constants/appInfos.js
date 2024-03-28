@@ -5,5 +5,5 @@ export default {
     WIDTH: Dimensions.get('window').width,
     HEIGHT: Dimensions.get('window').height,
   },
-  BASE_URL: 'http://192.168.1.102:3001',
+  BASE_URL: 'http://192.168.146.239:3001',
 };

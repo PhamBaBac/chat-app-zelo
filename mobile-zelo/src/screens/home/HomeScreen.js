@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import HeaderComponent from '../../components/HeaderComponent';
+import HeaderComponent from '../../components/HeaderComponet';
 import ButtonComponent from "../../components/ButtonComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { authSelector, removeAuth } from "../../redux/reducers/authReducer";
@@ -56,10 +56,7 @@ const HomeScreen = () => {
     navigation.navigate('MessageScreen', { conversation }); // Ensure 'MessageScreen' is the name of the conversation detail screen
   };
 
-  const handleLogout = async () => {
-    await AsyncStorage.clear();
-    dispatch(removeAuth({}));
-  };
+
 
   return (
     <View style={globalStyles.container}>
@@ -95,7 +92,7 @@ const HomeScreen = () => {
           </TouchableOpacity>
         )}
       />
-      <ButtonComponent title="Logout" onPress={handleLogout} />
+
     </View>
   );
 };
