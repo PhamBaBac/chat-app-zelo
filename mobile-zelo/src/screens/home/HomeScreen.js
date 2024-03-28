@@ -1,14 +1,19 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import HeaderComponent from '../../components/HeaderComponet';
+import HeaderComponent from '../../components/HeaderComponent';
+import ButtonComponent from "../../components/ButtonComponent";
+import { useDispatch, useSelector } from "react-redux";
+import { authSelector, removeAuth } from "../../redux/reducers/authReducer";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { COLORS, APPINFOS } from "../../constants";
 import { globalStyles } from "../../styles/globalStyle";
-import { Avatar } from "react-native-paper";
-
 
 const HomeScreen = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const user = useSelector(authSelector);
+
   const [conversations, setConversations] = React.useState([
     {
       id: 1,
@@ -48,7 +53,12 @@ const HomeScreen = () => {
   ]);
 
   const handlePress = (conversation) => {
-    navigation.navigate('MessageScreen', { conversation }); // Đảm bảo MessageScreen là tên của màn hình chi tiết cuộc trò chuyện
+    navigation.navigate('MessageScreen', { conversation }); // Ensure 'MessageScreen' is the name of the conversation detail screen
+  };
+
+  const handleLogout = async () => {
+    await AsyncStorage.clear();
+    dispatch(removeAuth({}));
   };
 
   return (
@@ -69,7 +79,7 @@ const HomeScreen = () => {
       />
       <FlatList
         data={conversations}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => handlePress(item)}>
             <View style={[styles.conversation, { borderBottomColor: COLORS.gray5 }]}>
@@ -85,6 +95,7 @@ const HomeScreen = () => {
           </TouchableOpacity>
         )}
       />
+      <ButtonComponent title="Logout" onPress={handleLogout} />
     </View>
   );
 };

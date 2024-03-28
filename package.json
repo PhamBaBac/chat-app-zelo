@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "react-native-image-picker": "^7.1.2",
+    "react-native-paper": "^5.12.3"
+  }
+}
